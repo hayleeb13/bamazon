@@ -48,7 +48,11 @@ function buy() {
       connection.query(queryString, {item_id: item}, function(err, results) {
         if (err) throw error;
         var productInfo = results[0];
-        if (quantity <= productInfo.stock_quantity){
+        if (productInfo == undefined) {
+          console.log("Sorry that is not a valid ID.");
+          display();
+        }
+        else if (quantity <= productInfo.stock_quantity){
           console.log("Order Successful!");
           var newQueryString = "UPDATE products SET stock_quantity = " + (productInfo.stock_quantity - quantity) + " WHERE item_id = " + item;
           connection.query(newQueryString, function(err, results){
